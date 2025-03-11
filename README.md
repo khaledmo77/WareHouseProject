@@ -4,12 +4,19 @@ The Warehouse Management System is a Windows Forms application developed using C
 
 Key Features
 ✅ Warehouse Management: Add and manage multiple warehouses, each with a unique name and location.
+
 ✅ Item Management: Store detailed information about items, including name, category, and expiration date.
+
 ✅ Inventory Tracking: Monitor the stock levels of items across different warehouses.
+
 ✅ Supplier & Customer Management: Maintain records of suppliers and customers for smooth transactions.
+
 ✅ Supply Orders: Track incoming inventory from suppliers, including the quantity and manufacturing details.
+
 ✅ Withdrawal Orders: Manage outgoing inventory for customers and track stock depletion.
+
 ✅ Transfers Between Warehouses: Transfer stock from one warehouse to another with proper documentation.
+
 ✅ Reporting & Analysis: Generate reports on stock levels, expired items, and movement history.
 
 Database Structure & Relationships
