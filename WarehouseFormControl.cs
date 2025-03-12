@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WareHouseProject.Models;
+using Microsoft.EntityFrameworkCore;
 namespace WareHouseProject
 {
     public partial class WarehouseFormControl : UserControl
@@ -200,7 +201,7 @@ namespace WareHouseProject
             }
 
             // Check if the item exists
-            var item = _context.Items.FirstOrDefault(i => i.Name == itemName);
+            var item = _context.Items.AsNoTracking().FirstOrDefault(i => i.Name == itemName);
             if (item == null)
             {
                 item = new Item { Name = itemName, Price = price };
@@ -237,9 +238,11 @@ namespace WareHouseProject
             WarehouseSaved?.Invoke(this, EventArgs.Empty);
             this.Dispose();
         }
-        public void SetItemForEdit(WarehouseItem item)
+        public void SetItemForEdit(WarehouseItem item,Warehouse warehouse)
         {
-            if (item != null)
+            _warehouse = warehouse;
+
+            if (item != null && item.Item != null)
             {
                 _mode = FormMode.EditItem;
                 NameTextBox.Text = item.Item?.Name;

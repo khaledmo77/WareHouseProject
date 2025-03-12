@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using WareHouseProject.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace WareHouseProject
 {
@@ -104,9 +105,13 @@ namespace WareHouseProject
             }
 
             int itemIdColumnIndex = dataGridView1.Columns["ItemId"].Index;
-            int id = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[itemIdColumnIndex].Value);
+            int itemId = Convert.ToInt32(dataGridView1.SelectedRows[0].Cells[itemIdColumnIndex].Value);
 
-            var warehouseItem = _context.WarehouseItems.Find(id);
+            var warehouseItem = _context.WarehouseItems
+           .Include(wi => wi.Item)
+             .AsNoTracking() // Ensure Item is loaded
+           .FirstOrDefault(wi => wi.ItemId == itemId && wi.WarehouseId == _warehouseID);
+            //error here two table must be modified
 
             if (warehouseItem == null)
             {
@@ -124,9 +129,10 @@ namespace WareHouseProject
             warehouseFormControl.CloseRequested += WarehouseForm_CloseRequested;
 
             // Pass the existing warehouse item for editing
-            warehouseFormControl.SetItemForEdit(warehouseItem);
+            warehouseFormControl.SetItemForEdit(warehouseItem,_warehouse);
 
             AddItemPanel.Controls.Clear(); // Clear previous controls
+
             AddItemPanel.Controls.Add(warehouseFormControl);
             warehouseFormControl.Dock = DockStyle.Fill;
         }
