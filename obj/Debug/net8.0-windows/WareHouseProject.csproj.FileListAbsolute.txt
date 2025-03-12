@@ -128,7 +128,6 @@ D:\Linq\WareHouseProject\WareHouseProject\bin\Debug\net8.0-windows\runtimes\win-
 D:\Linq\WareHouseProject\WareHouseProject\bin\Debug\net8.0-windows\runtimes\win\lib\net6.0\System.Runtime.Caching.dll
 D:\Linq\WareHouseProject\WareHouseProject\bin\Debug\net8.0-windows\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.csproj.AssemblyReference.cache
-D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.Form1.resources
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.csproj.GenerateResource.cache
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.GeneratedMSBuildEditorConfig.editorconfig
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.AssemblyInfoInputs.cache
@@ -140,3 +139,7 @@ D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\refint\WareHo
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.pdb
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.genruntimeconfig.cache
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\ref\WareHouseProject.dll
+D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.sourcelink.json
+D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.WarehouseForm.resources
+D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.WarehouseFormControl.resources
+D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.ShowWareHouseItemsUserControl.resources
