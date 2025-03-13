@@ -12,6 +12,10 @@ namespace WareHouseProject.Models
         public string Name { get; set; }
         public decimal Price { get; set; }
 
+        public DateTime ProductionDate { get; set; }
+
+        public DateTime ExpiryDate { get; set; }
+
         public ICollection<WarehouseItem> WarehouseItems { get; set; }
         public ICollection<SupplyOrderDetail> SupplyOrderDetails { get; set; }
         public ICollection<WithdrawalOrderDetail> WithdrawalOrderDetails { get; set; }

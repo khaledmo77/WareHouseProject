@@ -16,8 +16,9 @@ namespace WareHouseProject
         private readonly WarehouseManagementContext _context = new WarehouseManagementContext(new Microsoft.EntityFrameworkCore.DbContextOptions<WarehouseManagementContext>());
         public event EventHandler WarehouseSaved;
         public event EventHandler CloseRequested;
+
         private Warehouse _warehouse;
-        public enum FormMode { AddWarehouse, AddItem, EditItem } // Define modes
+        public enum FormMode { AddWarehouse, AddItem, EditItem, AddSupplier, EditSupplier, AddCustomer, EditCustomer, AddSupplyOrder, EditSupplyOrder } // Define modes
         private FormMode _mode;
         public WarehouseFormControl(FormMode mode)
         {
@@ -41,7 +42,75 @@ namespace WareHouseProject
                 nameLable.Text = "Warehouse Name";
                 nameLable2.Text = "Location";
             }
+            else if (_mode == FormMode.AddSupplier || _mode == FormMode.EditSupplier)
+            {
+                QuantatyBox.Visible = true;
+                QuantityLabel.Visible = true;
+                QuantityLabel.Text = "Phone Number";
+                AddLable.Text = _mode == FormMode.AddSupplier ? "Add Supplier" : "Edit Supplier";
+                nameLable.Text = "Supplier Name";
+                nameLable2.Text = "Location";
+            }
+            else if (_mode == FormMode.AddCustomer || _mode == FormMode.EditCustomer)
+            {
+                QuantatyBox.Visible = true;
+                QuantityLabel.Visible = true;
+                QuantityLabel.Text = "Phone Number";
+                AddLable.Text = _mode == FormMode.AddCustomer ? "Add Customer" : "Edit Customer";
+                nameLable.Text = "Customer Name";
+                nameLable2.Text = "Location";
+            }
+            else if (_mode == FormMode.AddSupplyOrder || _mode == FormMode.EditSupplyOrder)
+            {
+                //quantity
+                QuantatyBox.Visible = true;
+                //dates
+                OrderDateLabel.Visible = true;
+                OrdermonthCalendar1.Visible = true;
+                ExpiryDateLabel.Visible = true;
+              ExpirymonthCalendar1.Visible = true;
+                ProductionDateLabel.Visible = true;
+              ProductionmonthCalendar2.Visible = true;
+                //wareHouse combobox data
+                wareHouseCombo.Visible = true;
+                wareHouseCombo.DataSource = _context.Warehouses.ToList();
+                wareHouseCombo.DisplayMember = "Name";
+                wareHouseCombo.ValueMember = "WarehouseId";
+                wareHouseIDLabelCombo.Visible = true;
+                //item combobox data
+                ItemIdCombo.Visible = true;
+                ItemNameLabelCombo.Visible = true;
+                NameTextBox.Visible = false;
+                LocationOrPriceTextBox.Visible = false;
+                ItemIdCombo.DataSource = _context.Items.ToList();
+                ItemIdCombo.DisplayMember = "Name";
+                ItemIdCombo.ValueMember = "ItemId";
+                //supplier combobox data
+                supplierIdLabelCombo.Visible = true;
+                SupplierCombo.Visible = true;
+                SupplierCombo.DataSource = _context.Suppliers.ToList();
+                SupplierCombo.DisplayMember = "Name";
+                SupplierCombo.ValueMember = "SupplierId";
+                QuantityLabel.Visible = true;
+                QuantityLabel.Text = "Quantity";
+                AddLable.Text = _mode == FormMode.AddSupplyOrder ? "Add Supply Order" : "Edit Supply Order";
+                nameLable.Visible =false;
+                nameLable2.Visible=false;
+            }
         }
+        //private void LoadData()
+        //{
+        //    // Load Suppliers into ComboBox
+         
+        ////    SupplierComboBox.DisplayMember = "Name";  // Show Supplier Name
+        // //   SupplierComboBox.ValueMember = "Id";  // Use Supplier ID internally
+
+        //    // Load Products into ComboBox
+     
+        //  //  ProductComboBox.DisplayMember = "Name";  // Show Product Name
+        ////    ProductComboBox.ValueMember = "Id";  // Use Product ID internally
+        //}
+
         private void save_Click(object sender, EventArgs e)
         {
             if (_mode == FormMode.AddWarehouse)
@@ -52,7 +121,276 @@ namespace WareHouseProject
             {
                 SaveItem(_warehouse);
             }
+            else if (_mode == FormMode.AddSupplier || _mode == FormMode.EditSupplier)
+            {
+                SaveSupplier();
+            }
+            else if (_mode == FormMode.AddCustomer || _mode == FormMode.EditCustomer)
+            {
+                saveCustomer();
+            }
+            else if (_mode == FormMode.AddSupplyOrder || _mode == FormMode.EditSupplyOrder)
+            {
+                SaveSupplyOrder();
+            }
         }
+        private int? editingSupplyOrderId = null;
+     // Nullable so we can check if it's new
+
+        private void SaveSupplyOrder()
+        {
+            if (SupplierCombo.SelectedValue == null || wareHouseCombo.SelectedValue == null)
+            {
+                MessageBox.Show("Please select a valid Supplier and Warehouse.");
+                return;
+            }
+
+            if (ItemIdCombo.SelectedValue == null)
+            {
+                MessageBox.Show("Please select a valid Product.");
+                return;
+            }
+
+            if (!int.TryParse(QuantatyBox.Text, out int quantity) || quantity <= 0)
+            {
+                MessageBox.Show("Please enter a valid quantity.");
+                return;
+            }
+
+            // Get selected values
+            int supplierId = (int)SupplierCombo.SelectedValue;
+            int warehouseId = (int)wareHouseCombo.SelectedValue;
+            int itemId = (int)ItemIdCombo.SelectedValue;
+            DateTime orderDate = OrdermonthCalendar1.SelectionStart;
+            DateTime expiryDate = ExpirymonthCalendar1.SelectionStart;
+            DateTime productionDate = ProductionmonthCalendar2.SelectionStart;
+
+            if (editingSupplyOrderId.HasValue)
+            {
+                var existingSupplyOrder = _context.SupplyOrders.Find(editingSupplyOrderId.Value);
+                if (existingSupplyOrder == null)
+                {
+                    MessageBox.Show("Error: Supply order not found.");
+                    return;
+                }
+
+                // ✅ Update existing order details
+                existingSupplyOrder.OrderDate = orderDate;
+                existingSupplyOrder.WarehouseId = warehouseId;
+                existingSupplyOrder.SupplierId = supplierId;
+
+                var existingSupplyOrderDetail = _context.SupplyOrderDetails
+                    .FirstOrDefault(d => d.SupplyOrderId == existingSupplyOrder.SupplyOrderId && d.ItemId == itemId);
+
+                if (existingSupplyOrderDetail != null)
+                {
+                    // ✅ Update existing item details
+                    existingSupplyOrderDetail.Quantity = quantity;
+                    existingSupplyOrderDetail.ExpiryDate = expiryDate;
+                    existingSupplyOrderDetail.ProductionDate = productionDate;
+                }
+                else
+                {
+                    // ✅ If the item was not found, add a new one
+                    var newSupplyOrderDetail = new SupplyOrderDetail
+                    {
+                        SupplyOrderId = existingSupplyOrder.SupplyOrderId,
+                        ItemId = itemId,
+                        Quantity = quantity,
+                        ExpiryDate = expiryDate,
+                        ProductionDate = productionDate
+                    };
+                    _context.SupplyOrderDetails.Add(newSupplyOrderDetail);
+                }
+            }
+            else // ✅ If it's a new order, create a new instance
+            {
+                var newSupplyOrder = new SupplyOrder
+                {
+                    OrderDate = orderDate,
+                    WarehouseId = warehouseId,
+                    SupplierId = supplierId
+                };
+
+                _context.SupplyOrders.Add(newSupplyOrder);
+                _context.SaveChanges();
+
+                var newSupplyOrderDetail = new SupplyOrderDetail
+                {
+                    SupplyOrderId = newSupplyOrder.SupplyOrderId,
+                    ItemId = itemId,
+                    Quantity = quantity,
+                    ExpiryDate = expiryDate,
+                    ProductionDate = productionDate
+                };
+
+                _context.SupplyOrderDetails.Add(newSupplyOrderDetail);
+            }
+
+            _context.SaveChanges();
+            WarehouseSaved?.Invoke(this, EventArgs.Empty);
+
+            // Instead of Dispose(), close the form or reset fields
+            this.Dispose(); // If you want to close the form after saving
+        }
+
+        public void setSupplyOrderForEdit(SupplyOrderDTO supplyOrder)
+        {
+            if (supplyOrder == null) return;
+  
+            editingSupplyOrderId = supplyOrder.SupplyOrderId;
+            // Ensure ComboBoxes are populated before setting values
+            LoadComboBoxes();
+
+            // Set values for ComboBoxes
+
+            SupplierCombo.SelectedValue = supplyOrder.SupplierID;
+            wareHouseCombo.SelectedValue = supplyOrder.WarehouseID;
+
+            // Set Dates
+            OrdermonthCalendar1.SetDate(supplyOrder.OrderDate);
+
+
+
+            if (supplyOrder.Items.Any())
+            {
+                var firstItem = supplyOrder.Items.FirstOrDefault();
+                ExpirymonthCalendar1.SetDate(firstItem.ExpiryDate);
+                ProductionmonthCalendar2.SetDate(firstItem.ProductionDate);
+                ItemIdCombo.SelectedValue = firstItem.ItemID;
+                QuantatyBox.Text = firstItem.Quantity.ToString();
+            }
+
+        }
+        public void LoadComboBoxes()
+        {
+            // Load suppliers
+            SupplierCombo.DataSource = _context.Suppliers.ToList();
+            SupplierCombo.DisplayMember = "SupplierName";  // Adjust based on your DB column name
+            SupplierCombo.ValueMember = "SupplierId";
+
+            // Load warehouses
+            wareHouseCombo.DataSource = _context.Warehouses.ToList();
+            wareHouseCombo.DisplayMember = "WarehouseName";  // Adjust based on your DB column name
+            wareHouseCombo.ValueMember = "WarehouseId";
+
+            // Load items
+            ItemIdCombo.DataSource = _context.Items.ToList();
+            ItemIdCombo.DisplayMember = "ItemName";  // Adjust based on your DB column name
+            ItemIdCombo.ValueMember = "ItemId";
+        }
+
+        //public void SetItemForEdit(WarehouseItem item, Warehouse warehouse)
+        //{
+        //    _warehouse = warehouse;
+
+        //    if (item != null && item.Item != null)
+        //    {
+        //        _mode = FormMode.EditItem;
+        //        NameTextBox.Text = item.Item?.Name;
+        //        LocationOrPriceTextBox.Text = item.Item?.Price.ToString();
+        //        QuantatyBox.Text = item.Quantity.ToString();
+        //    }
+        //}
+
+        private void saveCustomer()
+        {
+            string customerName = NameTextBox.Text.Trim();
+            string location = LocationOrPriceTextBox.Text.Trim();
+            int phoneNumber;
+            if (string.IsNullOrWhiteSpace(customerName) ||
+                string.IsNullOrWhiteSpace(location) ||
+                !int.TryParse(QuantatyBox.Text, out phoneNumber))
+            {
+                MessageBox.Show("Please enter a valid customer name, location, and phone number.");
+                return;
+            }
+            if (_mode == FormMode.AddCustomer)
+            {
+                // Ensure customer doesn't already exist
+                var existingCustomer = _context.Customers.AsNoTracking().FirstOrDefault(s => s.Name == customerName);
+
+                Customer newCustomer = new Customer
+                {
+                    Name = customerName,
+                    Location = location,
+                    PhoneNumber = phoneNumber.ToString()
+                };
+                _context.Customers.Add(newCustomer);
+            }
+            else if (_mode == FormMode.EditCustomer)
+            {
+                var existingCustomer = _context.Customers.FirstOrDefault(s => s.Name == customerName);
+                if (existingCustomer == null)
+                {
+                    MessageBox.Show("Customer not found for editing.");
+                    return;
+                }
+                // Update customer details
+                existingCustomer.Location = location;
+                existingCustomer.PhoneNumber = phoneNumber.ToString();
+                _context.Customers.Update(existingCustomer);
+            }
+            _context.SaveChanges();
+            WarehouseSaved?.Invoke(this, EventArgs.Empty);
+            this.Dispose();
+        }
+        private void SaveSupplier()
+        {
+            string supplierName = NameTextBox.Text.Trim();
+            string location = LocationOrPriceTextBox.Text.Trim();
+            int phoneNumber;
+
+            if (string.IsNullOrWhiteSpace(supplierName) ||
+                string.IsNullOrWhiteSpace(location) ||
+                !int.TryParse(QuantatyBox.Text, out phoneNumber))
+            {
+                MessageBox.Show("Please enter a valid supplier name, location, and phone number.");
+                return;
+            }
+
+            if (_mode == FormMode.AddSupplier)
+            {
+                // Ensure supplier doesn't already exist
+                var existingSupplier = _context.Suppliers.AsNoTracking().FirstOrDefault(s => s.Name == supplierName);
+
+                if (existingSupplier != null)
+                {
+                    MessageBox.Show("A supplier with this name already exists. Try a different name.");
+                    return;
+                }
+
+                Supplier newSupplier = new Supplier
+                {
+                    Name = supplierName,
+                    Location = location,
+                    PhoneNumber = phoneNumber.ToString()
+                };
+
+                _context.Suppliers.Add(newSupplier);
+            }
+            else if (_mode == FormMode.EditSupplier)
+            {
+                var existingSupplier = _context.Suppliers.FirstOrDefault(s => s.Name == supplierName);
+
+                if (existingSupplier == null)
+                {
+                    MessageBox.Show("Supplier not found for editing.");
+                    return;
+                }
+
+                // Update supplier details
+                existingSupplier.Location = location;
+                existingSupplier.PhoneNumber = phoneNumber.ToString();
+                _context.Suppliers.Update(existingSupplier);
+            }
+
+            _context.SaveChanges();
+            WarehouseSaved?.Invoke(this, EventArgs.Empty);
+            this.Dispose();
+        }
+
+
         //private void save_Click(object sender, EventArgs e)
         //{
         //    string warehouseName = NameTextBox.Text;
@@ -238,7 +576,7 @@ namespace WareHouseProject
             WarehouseSaved?.Invoke(this, EventArgs.Empty);
             this.Dispose();
         }
-        public void SetItemForEdit(WarehouseItem item,Warehouse warehouse)
+        public void SetItemForEdit(WarehouseItem item, Warehouse warehouse)
         {
             _warehouse = warehouse;
 
@@ -248,6 +586,24 @@ namespace WareHouseProject
                 NameTextBox.Text = item.Item?.Name;
                 LocationOrPriceTextBox.Text = item.Item?.Price.ToString();
                 QuantatyBox.Text = item.Quantity.ToString();
+            }
+        }
+        public void setSupplierForEdit(Supplier supplier)
+        {
+            if (supplier != null)
+            {
+                NameTextBox.Text = supplier.Name;
+                LocationOrPriceTextBox.Text = supplier.Location;
+                QuantatyBox.Text = supplier.PhoneNumber;
+            }
+        }
+        public void setCustomerForEdit(Customer customer)
+        {
+            if (customer != null)
+            {
+                NameTextBox.Text = customer.Name;
+                LocationOrPriceTextBox.Text = customer.Location;
+                QuantatyBox.Text = customer.PhoneNumber;
             }
         }
 
@@ -288,7 +644,7 @@ namespace WareHouseProject
         public void SetWarehouseAddItem(Warehouse warehouse)
         {
             _warehouse = warehouse;
-            
+
 
         }
 
@@ -296,5 +652,11 @@ namespace WareHouseProject
         {
 
         }
+
+        private void ItemIdLabelCombo_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
 }

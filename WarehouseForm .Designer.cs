@@ -33,24 +33,29 @@
             DeleteWareHouse = new Button();
             panelContainer = new Panel();
             Edit = new Button();
+            showSuppliers = new Button();
+            showCustomers = new Button();
+            ShowSupplyOrder = new Button();
+            ShowWithdrawOrder = new Button();
+            ShowTransferOrder = new Button();
             ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // dataGridView1
             // 
             dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(52, 42);
+            dataGridView1.Location = new Point(12, 12);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowHeadersWidth = 51;
-            dataGridView1.Size = new Size(930, 229);
+            dataGridView1.Size = new Size(625, 229);
             dataGridView1.TabIndex = 0;
             dataGridView1.CellClick += dataGridView1_CellClick;
             // 
             // AddWareHouse
             // 
-            AddWareHouse.Location = new Point(108, 325);
+            AddWareHouse.Location = new Point(24, 247);
             AddWareHouse.Name = "AddWareHouse";
-            AddWareHouse.Size = new Size(173, 29);
+            AddWareHouse.Size = new Size(173, 53);
             AddWareHouse.TabIndex = 1;
             AddWareHouse.Text = "ADD WareHouse";
             AddWareHouse.UseVisualStyleBackColor = true;
@@ -58,9 +63,9 @@
             // 
             // DeleteWareHouse
             // 
-            DeleteWareHouse.Location = new Point(740, 325);
+            DeleteWareHouse.Location = new Point(434, 247);
             DeleteWareHouse.Name = "DeleteWareHouse";
-            DeleteWareHouse.Size = new Size(166, 29);
+            DeleteWareHouse.Size = new Size(166, 53);
             DeleteWareHouse.TabIndex = 2;
             DeleteWareHouse.Text = "Delete WareHouse";
             DeleteWareHouse.UseVisualStyleBackColor = true;
@@ -68,26 +73,79 @@
             // 
             // panelContainer
             // 
-            panelContainer.Location = new Point(12, 1);
+            panelContainer.Location = new Point(12, 2);
             panelContainer.Name = "panelContainer";
-            panelContainer.Size = new Size(1040, 451);
+            panelContainer.Size = new Size(1105, 539);
             panelContainer.TabIndex = 3;
             // 
             // Edit
             // 
-            Edit.Location = new Point(426, 325);
+            Edit.Location = new Point(227, 247);
             Edit.Name = "Edit";
-            Edit.Size = new Size(166, 29);
+            Edit.Size = new Size(166, 53);
             Edit.TabIndex = 4;
             Edit.Text = "Edit";
             Edit.UseVisualStyleBackColor = true;
             Edit.Click += Edit_Click;
             // 
+            // showSuppliers
+            // 
+            showSuppliers.Location = new Point(660, 23);
+            showSuppliers.Name = "showSuppliers";
+            showSuppliers.Size = new Size(120, 52);
+            showSuppliers.TabIndex = 5;
+            showSuppliers.Text = "Suppliers";
+            showSuppliers.UseVisualStyleBackColor = true;
+            showSuppliers.Click += showSuppliers_Click;
+            // 
+            // showCustomers
+            // 
+            showCustomers.Location = new Point(802, 23);
+            showCustomers.Name = "showCustomers";
+            showCustomers.Size = new Size(110, 52);
+            showCustomers.TabIndex = 6;
+            showCustomers.Text = "Customers";
+            showCustomers.UseVisualStyleBackColor = true;
+            showCustomers.Click += showCustomers_Click;
+            // 
+            // ShowSupplyOrder
+            // 
+            ShowSupplyOrder.Location = new Point(660, 91);
+            ShowSupplyOrder.Name = "ShowSupplyOrder";
+            ShowSupplyOrder.Size = new Size(252, 51);
+            ShowSupplyOrder.TabIndex = 7;
+            ShowSupplyOrder.Text = "Show Supply Order";
+            ShowSupplyOrder.UseVisualStyleBackColor = true;
+            ShowSupplyOrder.Click += AddSupplyOrder_Click;
+            // 
+            // ShowWithdrawOrder
+            // 
+            ShowWithdrawOrder.Location = new Point(660, 172);
+            ShowWithdrawOrder.Name = "ShowWithdrawOrder";
+            ShowWithdrawOrder.Size = new Size(252, 51);
+            ShowWithdrawOrder.TabIndex = 8;
+            ShowWithdrawOrder.Text = "Show Withdraw Order";
+            ShowWithdrawOrder.UseVisualStyleBackColor = true;
+            // 
+            // ShowTransferOrder
+            // 
+            ShowTransferOrder.Location = new Point(660, 247);
+            ShowTransferOrder.Name = "ShowTransferOrder";
+            ShowTransferOrder.Size = new Size(252, 51);
+            ShowTransferOrder.TabIndex = 9;
+            ShowTransferOrder.Text = "Show Transfer Order";
+            ShowTransferOrder.UseVisualStyleBackColor = true;
+            // 
             // WarehouseForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1050, 450);
+            ClientSize = new Size(1129, 563);
+            Controls.Add(ShowTransferOrder);
+            Controls.Add(ShowWithdrawOrder);
+            Controls.Add(ShowSupplyOrder);
+            Controls.Add(showCustomers);
+            Controls.Add(showSuppliers);
             Controls.Add(Edit);
             Controls.Add(panelContainer);
             Controls.Add(DeleteWareHouse);
@@ -106,5 +164,10 @@
         private Button DeleteWareHouse;
         private Panel panelContainer;
         private Button Edit;
+        private Button showSuppliers;
+        private Button showCustomers;
+        private Button ShowSupplyOrder;
+        private Button ShowWithdrawOrder;
+        private Button ShowTransferOrder;
     }
 }

@@ -143,3 +143,6 @@ D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProj
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.WarehouseForm.resources
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.WarehouseFormControl.resources
 D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.ShowWareHouseItemsUserControl.resources
+D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.SuppliersUserControl.resources
+D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.CustomerUserControl.resources
+D:\Linq\WareHouseProject\WareHouseProject\obj\Debug\net8.0-windows\WareHouseProject.SupplyOrderUserControl.resources

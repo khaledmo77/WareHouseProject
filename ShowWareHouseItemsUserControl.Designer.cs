@@ -101,7 +101,7 @@
             // 
             // AddItemPanel
             // 
-            AddItemPanel.Location = new Point(23, 3);
+            AddItemPanel.Location = new Point(39, 58);
             AddItemPanel.Name = "AddItemPanel";
             AddItemPanel.Size = new Size(1070, 411);
             AddItemPanel.TabIndex = 6;
